@@ -17,5 +17,5 @@ To get started with our tool, visit our website or download our application. For
 |Daniel Yang|6937601|dy19hh@brocku.ca|  Dev Team |      
 |Di Wu |    |                   |    |     
 | William Li|6471254|wl18sc@brocku.ca|Product Owner,Dev Team|      
-|      |    |                   |    |         
+|Xiaobin Liu|6246789|xl17gl@brocku.ca|Scrum Master, Dev Team|         
 |      |    |                   |    |      
