@@ -16,6 +16,6 @@ To get started with our tool, visit our website or download our application. For
 |Yuhao  Cao|6594899 |yc18do@brocku.ca|  Dev Team |
 |Daniel Yang|6937601|dy19hh@brocku.ca|  Dev Team |      
 |Di Wu |    |                   |    |     
-| William Li|6471254|wl18sc@brocku.ca|Product Owner|      
+| William Li|6471254|wl18sc@brocku.ca|Product Owner,Dev Team|      
 |      |    |                   |    |         
 |      |    |                   |    |      
