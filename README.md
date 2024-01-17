@@ -14,7 +14,8 @@ To get started with our tool, visit our website or download our application. For
 | Name |Std#|Email|Role|
 |-----|----|------------------|----|
 |Yuhao  Cao|6594899 |yc18do@brocku.ca|  Dev Team |
-|Daniel Yang|6937601|dy19hh@brocku.ca|  Dev Team |      
+|Daniel Yang|6937601|dy19hh@brocku.ca|  Dev Team |    
+|Yuchen Ding|6677967|yd18jd@brocku.ca|  Dev Team |   
 |Di Wu |    |                   |    |     
 | William Li|6471254|wl18sc@brocku.ca|Product Owner,Dev Team|      
 |Xiaobin Liu|6246789|xl17gl@brocku.ca|Scrum Master, Dev Team|         
