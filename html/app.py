@@ -175,10 +175,9 @@ if __name__ == '__main__':
 def cleanup_test_data(original_url, short_path):
     """根据原始URL和短路径删除测试数据"""
     conn = create_connection()
-    sql = 'DELETE FROM url_mapping WHERE original_url = ? AND short_path = ?'
     try:
         c = conn.cursor()
-        c.execute(sql, (original_url, short_path))
+        c.execute('DELETE FROM url_mapping WHERE original_url = ? AND short_path = ?', (original_url, short_path))
         conn.commit()
     except sqlite3.Error as e:
         print(f"An error occurred: {e}")
