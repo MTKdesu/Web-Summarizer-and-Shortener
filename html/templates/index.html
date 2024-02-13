@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
     <title>Web Link Shorten</title>
     <style>
         body {
@@ -41,24 +40,13 @@
         .button-clicked {
             background-color: #555555; /* Dark Gray */
         }
+        
     </style>
-    <script>
-        function changeButtonColor() {
-            var button = document.getElementById("submitButton");
-            button.classList.add("button-clicked");
-        }
-
-        function resetButtonColor() {
-            var button = document.getElementById("submitButton");
-            button.classList.remove("button-clicked");
-        }
-    </script>
 </head>
 <body>
-
     <div class="container">
         <h2>Web Link Shorten</h2>
-        <form id="linkForm">
+        <form id="linkForm" onsubmit="submitLink(); return false;">
             <table>
                 <tr>
                     <th>Input your link</th>
@@ -73,12 +61,37 @@
                     <td><span id="shortenedLink">Your shorten link is here</span></td>
                 </tr>
             </table>
+            <input type="submit" style="display: none;"> <!-- 隐藏的提交按钮 -->
         </form>
     </div>
-    
+
     <script>
+        function isValidUrl(string) {
+            // Regular expression for URL validation
+            var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name and extension
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+            return !!pattern.test(string);
+        }
+
+        function changeButtonColor() {
+            // Function to change button color
+        }
+
+        function resetButtonColor() {
+            // Function to reset button color
+        }
+
         function submitLink() {
             var inputLink = document.getElementById("inputLink").value;
+            if (!isValidUrl(inputLink)) {
+                alert("It is not a correct URL form please check your input.");
+                return;
+            }
+            
             fetch('/', {
                 method: 'POST',
                 headers: {
@@ -86,13 +99,23 @@
                 },
                 body: 'url=' + encodeURIComponent(inputLink)
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('URL is unreachable or invalid');
+                }
+                return response.json();
+            })
             .then(data => {
                 document.getElementById("shortenedLink").textContent = data.short_url;
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to fetch: ' + error.message);
+            });
+
+            resetButtonColor();
         }
     </script>
     
-    </body>
-    </html>
+</body>
+</html>
