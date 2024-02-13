@@ -37,7 +37,7 @@ def test_redirect_to_url(client):
     """测试短链接重定向到原始URL"""
     # 插入测试数据到数据库
     original_url = 'http://example.com'
-    short_path = 'abc123'  # 假定这是根据某种逻辑生成的短链接路径
+    short_path = 'abc123'  
     insert_url_mapping(original_url, short_path)
 
     # 执行重定向测试
@@ -52,17 +52,16 @@ def test_redirect_to_url(client):
 def test_database_operations(client):
     """测试数据库操作，包括插入和查询URL映射"""
     original_url = 'http://example.com/test'
-    short_path = 'xyz789'  # 假定这是根据某种逻辑生成的短链接路径
-    insert_url_mapping(original_url, short_path)  # 假设这是应用中用于插入数据的函数
-    retrieved_url = query_original_url(short_path)  # 假设这是应用中用于查询数据的函数
+    short_path = 'xyz789'  
+    insert_url_mapping(original_url, short_path)  
+    retrieved_url = query_original_url(short_path)  
     assert retrieved_url == original_url, "查询到的原始URL应与插入的URL相匹配"
 
     # 清理测试数据
     cleanup_test_data(original_url, short_path)
 
-#def test_submit_invalid_url(client):
-   # """测试提交无效URL时的行为"""
-    #invalid_url = 'not_a_valid_url'
-    #response = client.post('/', data={'url': invalid_url})
-    # 假设您希望应用返回400 Bad Request状态码以表示输入无效
-    #assert response.status_code == 400, "提交无效URL应返回400状态码"
+def test_submit_invalid_url(client):
+    """测试提交无效URL时的行为"""
+    invalid_url = 'not_a_valid_url'
+    response = client.post('/', data={'url': invalid_url})
+    assert response.status_code == 404, "提交无效URL应返回404状态码"
