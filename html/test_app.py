@@ -57,7 +57,6 @@ def test_database_operations(client):
     retrieved_url = query_original_url(short_path)  
     assert retrieved_url == original_url, "查询到的原始URL应与插入的URL相匹配"
 
-    # 清理测试数据
     cleanup_test_data(original_url, short_path)
 
 def test_submit_invalid_url(client):
