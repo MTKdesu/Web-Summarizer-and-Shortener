@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, jsonify, render_template
 import sqlite3
+import validators
 
 
 app = Flask(__name__)
@@ -107,12 +108,12 @@ def base62_encode(num, base=62):
     return base62
 
 def create_connection():
-    """创建并返回一个数据库连接"""
+    """Create and return a database connection"""
     conn = sqlite3.connect('database.db')
     return conn
 
 def init_db():
-    """初始化数据库，创建表"""
+    """Initialize the database and create tables"""
     conn = create_connection()
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS url_mapping (
@@ -124,7 +125,7 @@ def init_db():
     conn.close()
 
 def insert_url_mapping(original_url, short_path):
-    """插入一条新的URL映射记录"""
+    """Insert a new URL mapping record"""
     conn = create_connection()
     c = conn.cursor()
     c.execute('INSERT INTO url_mapping (original_url, short_path) VALUES (?, ?)', (original_url, short_path))
@@ -132,7 +133,7 @@ def insert_url_mapping(original_url, short_path):
     conn.close()
 
 def query_original_url(short_path):
-    """根据短路径查询原始URL"""
+    """Query the original URL based on the short path"""
     conn = create_connection()
     c = conn.cursor()
     c.execute('SELECT original_url FROM url_mapping WHERE short_path=?', (short_path,))
@@ -146,21 +147,25 @@ def query_original_url(short_path):
 def home():
     if request.method == 'POST':
         original_url = request.form['url']
+
+        # Check if the URL is valid
+        if not validators.url(original_url):
+            return jsonify({'error': 'Invalid URL'}), 400  # 返回400 Bad Request
+
+        # Handle valid URL
         conn = create_connection()
         with conn:
             cursor = conn.cursor()
-            # 先生成短路径
             short_id = cursor.execute("INSERT INTO url_mapping (original_url, short_path) VALUES (?, '')", (original_url,)).lastrowid
             short_path = base62_encode(short_id)
-            # 然后立即更新刚刚插入的记录的short_path
             cursor.execute("UPDATE url_mapping SET short_path = ? WHERE id = ?", (short_path, short_id))
             conn.commit()
             short_url = request.host_url + short_path
             return jsonify({'short_url': short_url})
-    # POST请求的处理逻辑保持不变
-    else:
-        return render_template('index.html')
 
+    else:  # Handle GET requests
+        return render_template('index.html')  # 
+        
 @app.route('/<short_path>')
 def redirect_to_url(short_path):
     original_url = query_original_url(short_path)
@@ -169,11 +174,11 @@ def redirect_to_url(short_path):
     return 'URL not found', 404
 
 if __name__ == '__main__':
-    init_db()  # 确保数据库和表在应用启动前已创建
+    init_db()  #Make sure the database and tables are created before the application starts
     app.run(debug=True)
 
 def cleanup_test_data(original_url, short_path):
-    """根据原始URL和短路径删除测试数据"""
+    """Remove test data based on original URL and short path"""
     conn = create_connection()
     try:
         c = conn.cursor()
