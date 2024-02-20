@@ -78,46 +78,19 @@
         }
 
         function changeButtonColor() {
-            // Function to change button color
+            var button = document.getElementById("submitButton");
+            button.classList.add("button-clicked");
         }
 
         function resetButtonColor() {
-            // Function to reset button color
+            var button = document.getElementById("submitButton");
+            button.classList.remove("button-clicked");
         }
 
-        function submitLink1() {
-            var inputLink = document.getElementById("inputLink").value;
-            if (!isValidUrl(inputLink)) {
-                alert("It is not a correct URL form please check your input.");
-                return;
-            }
-            
-            fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'url=' + encodeURIComponent(inputLink)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('URL is unreachable or invalid');
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById("shortenedLink").textContent = data.short_url;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to fetch: ' + error.message);
-            });
 
-            resetButtonColor();
-        }
 
         function submitLink() {
-
+              changeButtonColor(); 
             var inputLink = document.getElementById("inputLink").value;
             if (!isValidUrl(inputLink)) {
                 alert("It is not a correct URL form please check your input.");
@@ -151,7 +124,7 @@
                 alert('An error occurred: ' + error.message);
             });
 
-            resetButtonColor();
+           setTimeout(resetButtonColor, 1000);
         }
     </script>
     
