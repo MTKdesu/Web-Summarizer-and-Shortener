@@ -40,24 +40,19 @@
         .button-clicked {
             background-color: #555555; /* Dark Gray */
         }
-        .navigation {
+        .top-right {
             position: absolute;
-            top: 0;
-            right: 0;
-            padding: 25px;
+            right: 10px;
+            top: 10px;
         }
-        
-        
     </style>
 </head>
 <body>
-    <div class="navigation">
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-        
-        <!-- Add other navigation links if needed -->
+    <div class="top-right">
+            <span>Welcome, {{ session['username'] }}</span>
+            <a href="/logout">Logout</a>
     </div>
-
+    
     <div class="container">
         <h2>Web Link Shorten</h2>
         <form id="linkForm" onsubmit="submitLink(); return false;">
@@ -72,12 +67,20 @@
                         <button type="button" id="submitButton" class="button" onclick="changeButtonColor(); submitLink();"
                                 onmouseleave="resetButtonColor()">Submit</button>
                     </td>
-                    <td><span id="shortenedLink">Your shorten link is here</span></td>
+                    <td>
+                        <span id="shortenedLink">Your shorten link is here</span>
+                        <!-- 新增加的分享按钮 -->
+                        <button id="shareButton" class="button" style="display: none;" onclick="shareOnFacebook()">Share on Facebook</button>
+                    </td>
                 </tr>
             </table>
-            <input type="submit" style="display: none;"> 
+            <input type="submit" style="display: none;"> <!-- 隐藏的提交按钮 -->
         </form>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.thewoody.ca" target="_blank">
+            Share our web to your facebook!
+         </a>
     </div>
+
 
     <script>
         function isValidUrl(string) {
@@ -91,7 +94,6 @@
             return !!pattern.test(string);
         }
 
-
         function changeButtonColor() {
             var button = document.getElementById("submitButton");
             button.classList.add("button-clicked");
@@ -102,7 +104,8 @@
             button.classList.remove("button-clicked");
         }
 
-        function submitLink1() {
+
+        function submitLink() {
             var inputLink = document.getElementById("inputLink").value;
             if (!isValidUrl(inputLink)) {
                 alert("It is not a correct URL form please check your input.");
@@ -131,47 +134,13 @@
             });
 
             resetButtonColor();
+            document.getElementById("shareButton").style.display = 'block';
         }
 
-        function submitLink() {
-            changeButtonColor(); // Ensure this is the first thing in the function
-
-
-            var inputLink = document.getElementById("inputLink").value;
-            if (!isValidUrl(inputLink)) {
-                alert("It is not a correct URL form please check your input.");
-                return;
-            }
-
-            fetch('/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'url=' + encodeURIComponent(inputLink)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    if(response.status === 400) {
-                        // to show 400 bad request
-                        return response.json().then(data => {
-                            alert(data.error);
-                        });
-                    }
-                    throw new Error('Request failed with status: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById("shortenedLink").textContent = data.short_url;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred: ' + error.message);
-            });
-
-            //resetButtonColor();
-            setTimeout(resetButtonColor, 1000);
+        function shareOnFacebook() {
+            var shortenedLink = document.getElementById("shortenedLink").textContent;
+            var facebookUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(shortenedLink);
+            window.open(facebookUrl, '_blank');
         }
     </script>
     
