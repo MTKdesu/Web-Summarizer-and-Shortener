@@ -255,7 +255,7 @@ def check_user(username, password):
     return False
 
 def cleanup_test_data(original_url, short_path):
-    """根据原始URL和短路径删除测试数据"""
+    """clean up data while testing"""
     conn = create_connection()
     sql = 'DELETE FROM url_mapping WHERE original_url = ? AND short_path = ?'
     try:
